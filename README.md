@@ -1,6 +1,6 @@
 # Port Killer
 
-![Port Killer Logo](port-killer.png)
+![Port Killer Logo](Sources/App/Resources/port-killer.png)
 
 A native macOS port termination tool. Quickly identify and kill processes running on specific ports.
 

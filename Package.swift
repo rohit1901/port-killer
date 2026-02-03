@@ -31,6 +31,7 @@ let package = Package(
         .executableTarget(
             name: "App",
             dependencies: ["Core"],
+            resources: [.process("Resources")],
             linkerSettings: [
                 .unsafeFlags(["-Xlinker", "-sectcreate", "-Xlinker", "__TEXT", "-Xlinker", "__info_plist", "-Xlinker", "Sources/App/Info.plist"])
             ]

@@ -19,6 +19,6 @@
     <key>LSUIElement</key>
     <true/>
     <key>CFBundleIconFile</key>
-    <string>AppIcon</string>
+    <string>port-killer</string>
 </dict>
 </plist>

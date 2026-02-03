@@ -20,24 +20,11 @@ struct ContentView: View {
     var body: some View {
         VStack(spacing: 0) {
             // Header Search
-            HStack(spacing: 8) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.secondary)
-                    .font(.caption)
-                
-                TextField("Search...", text: $searchText)
-                    .textFieldStyle(.plain)
-                    .font(.system(size: 12))
+            VStack {
+                TextField("Search", text: $searchText)
+                    .textFieldStyle(.roundedBorder)
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 10)
-            .background(Color(NSColor.controlBackgroundColor))
-            .overlay(
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundColor(Color(NSColor.separatorColor)),
-                alignment: .bottom
-            )
+            .padding(10)
             
             // List Content
             ScrollView {
@@ -67,34 +54,20 @@ struct ContentView: View {
             
             // Footer
             HStack {
-                Button(action: refreshPorts) {
-                    Label("Refresh", systemImage: "arrow.clockwise")
+                Button("Refresh") {
+                    refreshPorts()
                 }
-                .buttonStyle(LinkButtonStyle())
-                .font(.caption)
                 
                 Spacer()
                 
-                Button(action: {
+                Button("Quit") {
                     NSApplication.shared.terminate(nil)
-                }) {
-                    Label("Quit", systemImage: "power")
                 }
-                .buttonStyle(LinkButtonStyle())
-                .font(.caption)
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .background(Color(NSColor.windowBackgroundColor))
-            .overlay(
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundColor(Color(NSColor.separatorColor)),
-                alignment: .top
-            )
+            .padding(10)
         }
         .frame(width: 280, height: 350)
-        .background(Color(NSColor.textBackgroundColor))
+        .background(.ultraThinMaterial)
         .onAppear {
             refreshPorts()
         }
@@ -116,55 +89,39 @@ struct PortRow: View {
     let onKill: () -> Void
     
     var body: some View {
-        HStack(spacing: 10) {
-            // Process Info
+        HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text(port.command)
-                    .font(.system(size: 13, weight: .medium))
+                    .font(.headline)
                     .lineLimit(1)
                     .truncationMode(.tail)
                 
                 HStack(spacing: 4) {
                     Text("PID \(port.pid)")
                     Text("•")
-                    Text("TCP") // Assuming TCP based on lsof command
+                    Text("TCP")
                 }
-                .font(.system(size: 10))
+                .font(.caption)
                 .foregroundColor(.secondary)
             }
             
             Spacer()
             
-            // Port Number
             Text(":\(port.port.formatted(.number.grouping(.never)))")
-                .font(.system(size: 12, weight: .bold, design: .monospaced))
-                .foregroundColor(.primary)
-                .padding(.horizontal, 6)
-                .padding(.vertical, 2)
-                .background(Color(NSColor.controlBackgroundColor))
-                .cornerRadius(4)
+                .font(.body.monospaced())
+                .foregroundColor(.secondary)
             
-            // Kill Action
-            Button(action: onKill) {
-                Image(systemName: "xmark")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(isHovered ? .red : .secondary)
-                    .frame(width: 20, height: 20)
-                    .contentShape(Rectangle())
+            if isHovered {
+                Button(action: onKill) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
-            .opacity(isHovered ? 1 : 0.5)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
-        .background(isHovered ? Color(NSColor.selectedControlColor).opacity(0.1) : Color.clear)
+        .background(isHovered ? Color.secondary.opacity(0.1) : Color.clear)
         .contentShape(Rectangle())
-    }
-}
-
-struct LinkButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .foregroundColor(configuration.isPressed ? .secondary : .primary)
     }
 }
